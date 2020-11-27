@@ -13,7 +13,6 @@ Creates OpenGL window and renders a 3d image of a packman board.
 #include <math.h>
 #include <stdlib.h> // standard definitions
 #include "pacman.h"
-#include <thread>
 
 using namespace std;
 
@@ -34,7 +33,7 @@ float ghostColorsFlat[4][3] = {
 
 };
 
-//declares coordinates for vertical maze walls startpoints and endpoints
+//declares coordinates for vertical maze walls startpoints and endpoints 
 float vMazeWalls[30][4] = {
     //outside walls
     {0, 0, 0, 7},
@@ -76,7 +75,7 @@ float vMazeWalls[30][4] = {
     {14.5, 17.5, 14.5, 18.5},
     {15.5, 17.5, 15.5, 18.5}};
 
-//declares coordinates for horizontal maze walls startpoints and endpoints
+//declares coordinates for horizontal maze walls startpoints and endpoints 
 float hMazeWalls[35][4] = {
     //outside walls
     {0, 0, 17, 0},
@@ -125,7 +124,7 @@ float hMazeWalls[35][4] = {
     {14.5, 17.5, 15.5, 17.5},
     {14.5, 18.5, 15.5, 18.5}};
 
-//martrix that represents coins, 0 means empty, 1 means coin, 2 means disk
+//martrix that represents coins, 0 means empty, 1 means coin, 2 means disk 
 int coinMatrix[20][17] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1},
@@ -171,31 +170,6 @@ int coinMatrix[20][17] = {
     */
 };
 
-int wallMatrix[22][19] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-    {0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0},
-    {0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0},
-    {0, 2, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 2, 0},
-    {0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-    {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-    {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-    {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-    {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-    {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-    {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
-    {0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0},
-    {0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0},
-    {0, 2, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 2, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-};
-
 // Camera position
 float x = 0.0, y = -5.0, z = 1.0; // initially 5 units south of origin
 float deltaMove = 0.0;            // initially camera doesn't move
@@ -226,12 +200,14 @@ float ghostColors[4][4] = {
     {0.251, 0.878, 0.816, 1.0f},
     {1.000, 0.000, 0.000, 1.0f},
     {1.000, 0.647, 0.000, 1.0f},
-    {1.000, 0.714, 0.757, 1.0f}};
+    {1.000, 0.714, 0.757, 1.0f}
+};
 float ghostColorsDark[4][4] = {
     {0.255, 0.412, 0.882, 1.0f},
     {0.545, 0.000, 0.000, 1.0f},
     {0.824, 0.412, 0.118, 1.0f},
-    {0.780, 0.082, 0.522, 1.0f}};
+    {0.780, 0.082, 0.522, 1.0f}
+};
 GLfloat shininess[] = {5};
 
 bool bIsLightingOn = false;
@@ -320,7 +296,7 @@ void drawCoins()
                 }
                 else
                 {
-                    glColor3f(0.855, 0.647, 0.125);
+                    glColor3f(0.855, 0.647, 0.125); 
                 }
 
                 glPushMatrix();
@@ -345,7 +321,7 @@ void drawCoins()
                 }
                 else
                 {
-                    glColor3f(0.753, 0.753, 0.753);
+                    glColor3f(0.753, 0.753, 0.753); 
                 }
 
                 glPushMatrix();
@@ -357,37 +333,6 @@ void drawCoins()
                 glPopMatrix();
             }
         }
-    }
-}
-
-void movePacman(int dir)
-{
-    int x = Pacman.xyzPos[0];
-    int y = Pacman.xyzPos[1];
-
-    //get dir
-    switch (dir)
-    {
-    case 0: //right
-        x = x + 1;
-        break;
-    case 1: //left
-        x = x - 1;
-        break;
-    case 2: //up
-        y = y+1;
-        break;
-    case 3: //down
-        y = y-1;
-        break;
-    }
-
-    //check if x,y is a wall
-    //if not a wall move pacman
-    if (wallMatrix[x][y] != 0){
-        Pacman.xyzPos[0] = x; //set x pos
-        Pacman.xyzPos[1] = y; //set y pos
-        drawPacman();
     }
 }
 
@@ -407,7 +352,7 @@ void drawPacman()
     }
 
     glPushMatrix();
-    glTranslatef(Pacman.xyzPos[0], Pacman.xyzPos[1], 0.75);
+    glTranslatef(17, 9, 0.75);
     glutSolidSphere(0.95, 100, 100);
     glPopMatrix();
 }
@@ -553,26 +498,31 @@ void processNormalKeys(unsigned char key, int xx, int yy)
     }
 }
 
-void SpecialKeys(int key, int x, int y)
+void pressSpecialKey(int key, int xx, int yy)
 {
-    int dir = 0;
     switch (key)
     {
-    case GLUT_KEY_LEFT:
-        dir = 1;
-        break;
-    case GLUT_KEY_RIGHT:
-        dir = 0;
-        break;
     case GLUT_KEY_UP:
-        dir = 2;
+        deltaMove = 1.0;
         break;
     case GLUT_KEY_DOWN:
-        dir = 3;
+        deltaMove = -1.0;
         break;
     }
+}
 
-    movePacman(dir);
+void releaseSpecialKey(int key, int x, int y)
+{
+
+    switch (key)
+    {
+    case GLUT_KEY_UP:
+        deltaMove = 0.0;
+        break;
+    case GLUT_KEY_DOWN:
+        deltaMove = 0.0;
+        break;
+    }
 }
 
 //----------------------------------------------------------------------
@@ -617,11 +567,6 @@ void init()
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
 }
-
-void glutMainLoop(void)
-{
-}
-
 //----------------------------------------------------------------------
 // Main program  - standard GLUT initializations and callbacks
 //----------------------------------------------------------------------
@@ -650,15 +595,15 @@ int main(int argc, char **argv)
     glutMouseFunc(mouseButton);           // process mouse button push/release
     glutMotionFunc(mouseMove);            // process mouse dragging motion
     glutKeyboardFunc(processNormalKeys);  // process standard key clicks
-    glutSpecialFunc(SpecialKeys);         //move pacman keys
+    glutSpecialFunc(pressSpecialKey);     // process special key pressed
+                                          // Warning: Nonstandard function! Delete if desired.
+    glutSpecialUpFunc(releaseSpecialKey); // process special key release
     toggleLighting();
     // Initial Pacman
     Pacman.radius = 0.75;
     Pacman.color[0] = 1.0;
     Pacman.color[1] = 1.0;
     Pacman.color[2] = 0.0;
-    Pacman.xyzPos[0] = 17;
-    Pacman.xyzPos[1] = 9;
 
     // Initial Ghosts
     for (int i = 0; i < 4; i++)

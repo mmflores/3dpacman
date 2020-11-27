@@ -21,7 +21,6 @@ class ECE_Ghost {
         double bodyHeight;
         float color[3];
         double xyzPos[3];
-    
 };
 
 /*
@@ -32,11 +31,6 @@ class ECE_Pacman {
         double radius;
         float color[4];
         double xyzPos[3];
-
-    friend void drawPacman();
-    friend void movePacman(int dir);
-    friend void renderScene(void);
-    friend void SpecialKeys(int key, int x, int y);
 };
 
 class Maze {
@@ -46,7 +40,3 @@ class Maze {
         float color[4];
 }; 
 
-void drawPacman();
-void modePacman(int dir);
-void renderScene(void);
-void SpecialKeys(int key, int x, int y);
